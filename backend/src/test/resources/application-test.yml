@@ -1,0 +1,22 @@
+# Test profile: isolated H2, Flyway-migrated, no dev seeder, no H2 console.
+# Integration/slice tests annotate @ActiveProfiles("test") to get a clean, deterministic DB.
+spring:
+  datasource:
+    url: jdbc:h2:mem:riskdb-test;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  h2:
+    console:
+      enabled: false
+
+risk:
+  encryption:
+    key: test-only-key-deterministic

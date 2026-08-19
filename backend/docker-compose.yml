@@ -1,0 +1,26 @@
+# Optional real-Postgres path. Proves the Flyway migrations are portable: the exact same
+# V1/V2 migrations that run on H2 by default run here unchanged.
+#
+#   docker compose up -d
+#   mvn spring-boot:run -Dspring-boot.run.profiles=prod
+#
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: risk-register-postgres
+    environment:
+      POSTGRES_DB: riskdb
+      POSTGRES_USER: risk
+      POSTGRES_PASSWORD: risk
+    ports:
+      - "5432:5432"
+    volumes:
+      - risk-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U risk -d riskdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  risk-pgdata:
